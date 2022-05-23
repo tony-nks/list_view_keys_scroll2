@@ -79,10 +79,24 @@ class _MyHomePageState extends State<MyHomePage> {
                   children: [...data[name].map((e) {
                     return Container(
                       height: MediaQuery.of(context).size.width / 2,
-                      decoration: BoxDecoration(
-                          image: DecorationImage(image: AssetImage('assets/images/loading.PNG'), )
+                      child: Image.network(e,
+                        loadingBuilder: ( context, Widget child,
+                            loadingProgress) {
+                          if (loadingProgress == null) {
+                            return child;
+                          }
+                          return Center(
+                            child: CircularProgressIndicator(
+                              value: loadingProgress.expectedTotalBytes != null
+                                  ? loadingProgress.cumulativeBytesLoaded /
+                                  loadingProgress.expectedTotalBytes
+                                  : null,
+                            ),
+                          );
+                        },
+
+
                       ),
-                      child: Image.network(e),
                     );
                   }).toList()
                   ],
