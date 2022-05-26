@@ -57,51 +57,49 @@ class _MyHomePageState extends State<MyHomePage> {
     ]
   };
 
-
-
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: nav.length,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Homework example'),
+            title: Text('Homework example'),
             bottom: TabBar(
-                tabs: data.keys.map((e) => Tab(text: e.toString())).toList()
-            )
-        ),
+                tabs: data.keys.map((e) => Tab(text: e.toString())).toList())),
         body: TabBarView(
           children: data.keys.map((name) {
-            return ListView.builder(
-              itemCount: data.keys.length,
-              itemBuilder: (BuildContext, int index){
-                return Column(
-                  children: [...data[name].map((e) {
-                    return Container(
-                      height: MediaQuery.of(context).size.width / 2,
-                      child: Image.network(e,
-                        loadingBuilder: ( context, Widget child,
-                            loadingProgress) {
-                          if (loadingProgress == null) {
-                            return child;
-                          }
-                          return Center(
-                            child: CircularProgressIndicator(
-                              value: loadingProgress.expectedTotalBytes != null
-                                  ? loadingProgress.cumulativeBytesLoaded /
-                                  loadingProgress.expectedTotalBytes
-                                  : null,
-                            ),
-                          );
-                        },
-
-
-                      ),
-                    );
-                  }).toList()
-                  ],
-                );
-              }
+            return Column(
+              children: [
+                ...data[name].map((e) {
+                  return ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount: data.keys.length,
+                      itemBuilder: (BuildContext, int index) {
+                        return Container(
+                          height: MediaQuery.of(context).size.width / 2,
+                          child: Image.network(
+                            e,
+                            loadingBuilder:
+                                (context, Widget child, loadingProgress) {
+                              if (loadingProgress == null) {
+                                return child;
+                              }
+                              return Center(
+                                child: CircularProgressIndicator(
+                                  value: loadingProgress.expectedTotalBytes !=
+                                          null
+                                      ? loadingProgress.cumulativeBytesLoaded /
+                                          loadingProgress.expectedTotalBytes
+                                      : null,
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      });
+                }).toList()
+              ],
             );
           }).toList(),
         ),
