@@ -68,38 +68,32 @@ class _MyHomePageState extends State<MyHomePage> {
                 tabs: data.keys.map((e) => Tab(text: e.toString())).toList())),
         body: TabBarView(
           children: data.keys.map((name) {
-            return Column(
-              children: [
-                ...data[name].map((e) {
-                  return ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      itemCount: data.keys.length,
-                      itemBuilder: (BuildContext, int index) {
-                        return Container(
-                          height: MediaQuery.of(context).size.width / 2,
-                          child: Image.network(
-                            e,
-                            loadingBuilder:
-                                (context, Widget child, loadingProgress) {
-                              if (loadingProgress == null) {
-                                return child;
-                              }
-                              return Center(
-                                child: CircularProgressIndicator(
-                                  value: loadingProgress.expectedTotalBytes !=
-                                          null
-                                      ? loadingProgress.cumulativeBytesLoaded /
-                                          loadingProgress.expectedTotalBytes
-                                      : null,
-                                ),
-                              );
-                            },
-                          ),
-                        );
-                      });
-                }).toList()
-              ],
+            return ListView.builder(
+              key: PageStorageKey(name),
+              scrollDirection: Axis.vertical,
+              itemCount: data[name].length,
+              itemBuilder: (BuildContext _, int index) {
+                return Container(
+                  height: 200,
+                  child: Image.network(
+                    data[name][index],
+                    loadingBuilder: (BuildContext context, Widget child,
+                        ImageChunkEvent loadingProgress) {
+                      if (loadingProgress == null) {
+                        return child;
+                      }
+                      return Center(
+                        child: CircularProgressIndicator(
+                          value: loadingProgress.expectedTotalBytes != null
+                              ? loadingProgress.cumulativeBytesLoaded /
+                                  loadingProgress.expectedTotalBytes
+                              : null,
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
             );
           }).toList(),
         ),
